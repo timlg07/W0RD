@@ -7,21 +7,29 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 
 public class Main extends Application {
 	
-	HTMLEditor editor;			
-	static String fileName = "htmlText.txt";
+	HTMLEditor editor;
+	int activeFile = 0;
+	boolean isRunning = false;
+	Label stateOut = new Label("bereit");
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -29,7 +37,7 @@ public class Main extends Application {
 			VBox root = new VBox();
 			
 			editor = new HTMLEditor();
-			editor.setHtmlText(load(fileName));
+			editor.setHtmlText(load("data\\file"+ activeFile + ".txt"));
 			
 			ToolBar tools = new ToolBar();
 			
@@ -37,24 +45,68 @@ public class Main extends Application {
 			saveButton.setOnAction(new EventHandler<ActionEvent>(){
 				@Override
 				public void handle(ActionEvent event) {
-					save(fileName);
+					save("data\\file"+ activeFile + ".txt");
 				}
 			});
 			
+			Pagination select = new Pagination();
+			select.setPageFactory(new Callback<Integer, Node>(){
+				@Override
+				public Node call(Integer param){
+					save("data\\file"+ activeFile + ".txt");
+					activeFile = param;
+					editor.setHtmlText(load("data\\file"+ param + ".txt"));
+					int showIndex = activeFile+1;
+					primaryStage.setTitle("Datei: " + showIndex);
+					return new Label("Datei: "+showIndex);
+				}
+			});
+			
+			new Thread(() -> {
+				while(isRunning){
+					try {
+						Thread.sleep(8_000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					save("data\\file"+ activeFile + ".txt");
+				}
+			}).start();
+			
 			tools.getItems().add(saveButton);
+			tools.getItems().add(new Label("Datei auswählen: "));
+			tools.getItems().add(select);
+			tools.getItems().add(stateOut);
 			root.getChildren().add(editor);
 			root.getChildren().add(tools);
 			
-			Scene scene = new Scene(root,600,500);
+			Scene scene = new Scene(root,700,600);
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			primaryStage.setTitle(fileName);
+			primaryStage.setTitle("Datei: " + activeFile);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public void setStateOut(String newValue){
+		Platform.runLater(() -> {
+			stateOut.setText(newValue);
+		});
+	}
+	
 	public void save(String name) {
+		new Thread( () -> {
+			setStateOut("speichern...");
+			try {
+				Thread.sleep(1_000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			setStateOut((isRunning)? "bereit" : "Fehler");
+		}).start();
+		
+		
 		File file = new File(name);
 		
 		PrintWriter pWriter = null; 
@@ -68,7 +120,7 @@ public class Main extends Application {
 		    	pWriter.flush(); 
 		        pWriter.close(); 
 		    } 
-		} 
+		}
 	}
 	
 	private static String load(String datName) { 
@@ -95,11 +147,16 @@ public class Main extends Application {
 	
 	@Override
 	public void stop() throws Exception {
-		save(fileName);
+		save("data\\file"+ activeFile + ".txt");
+		isRunning = false;
+	}
+	
+	@Override
+	public void init() throws Exception {
+		isRunning = true;
 	}
 	
 	public static void main(String[] args) {
-		if(args.length == 1) {fileName = args[0];}
 		launch(args);
 	}
 }
