@@ -37,7 +37,7 @@ public class Main extends Application {
 			VBox root = new VBox();
 			
 			editor = new HTMLEditor();
-			editor.setHtmlText(load("data\\file"+ activeFile + ".txt"));
+			editor.setHtmlText(load("data\\file"+ activeFile + ".html"));
 			
 			ToolBar tools = new ToolBar();
 			
@@ -45,7 +45,7 @@ public class Main extends Application {
 			saveButton.setOnAction(new EventHandler<ActionEvent>(){
 				@Override
 				public void handle(ActionEvent event) {
-					save("data\\file"+ activeFile + ".txt");
+					save("data\\file"+ activeFile + ".html");
 				}
 			});
 			
@@ -53,9 +53,9 @@ public class Main extends Application {
 			select.setPageFactory(new Callback<Integer, Node>(){
 				@Override
 				public Node call(Integer param){
-					save("data\\file"+ activeFile + ".txt");
+					save("data\\file"+ activeFile + ".html");
 					activeFile = param;
-					editor.setHtmlText(load("data\\file"+ param + ".txt"));
+					editor.setHtmlText(load("data\\file"+ param + ".html"));
 					int showIndex = activeFile+1;
 					primaryStage.setTitle("Datei: " + showIndex);
 					return new Label("Datei: "+showIndex);
@@ -69,7 +69,7 @@ public class Main extends Application {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					save("data\\file"+ activeFile + ".txt");
+					save("data\\file"+ activeFile + ".html");
 				}
 			}).start();
 			
@@ -147,7 +147,7 @@ public class Main extends Application {
 	
 	@Override
 	public void stop() throws Exception {
-		save("data\\file"+ activeFile + ".txt");
+		save("data\\file"+ activeFile + ".html");
 		isRunning = false;
 	}
 	
