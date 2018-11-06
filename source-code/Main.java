@@ -1,4 +1,4 @@
-package application;
+package classic;
 	
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -48,6 +48,7 @@ public class Main extends Application {
 			
 			ToolBar tools = new ToolBar();
 			
+			// TODO save with STRG + S 
 			Button saveButton = new Button("Speichern");
 			saveButton.setOnAction(new EventHandler<ActionEvent>(){
 				@Override
@@ -58,7 +59,7 @@ public class Main extends Application {
 			
 			Button saveUnderButton = new Button("Speichern unter...");
 			saveUnderButton.setOnAction((ActionEvent e) -> {
-					saveUnder(primaryStage);
+				saveUnder(primaryStage);
 			});
 			
 			Button loadFileButton = new Button("Öffnen...");
@@ -156,6 +157,9 @@ public class Main extends Application {
 		}).start();
 		
 		FileChooser fc = new FileChooser();
+		fc.setTitle("Wählen Sie Verzeichniss und Name");
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Website","*.html"));
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Quelltext","*.txt"));
 		File file = fc.showSaveDialog(primaryStage);
 		
 		PrintWriter pWriter = null; 
@@ -171,7 +175,7 @@ public class Main extends Application {
 		    } 
 		}
 	}
-	
+    
 	private static String load(File file) { 
 
         if (!file.canRead() || !file.isFile()) 
