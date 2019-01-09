@@ -1,5 +1,3 @@
-package classic;
-	
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -217,7 +215,7 @@ public class Main extends Application {
 	private static String toNormHTML(String text) {
 		return text
 			.replaceFirst("<body contenteditable=\"true\">", "<body>")
-			.replaceFirst("</body>", "<div style=\"position:fixed;bottom:0;left:50%;transform:translate(-50%,0%);-webkit-transform:translate(-50%,0%);\"><font face=\"Source Code Pro Black\" size=\"2\" color=\"#f2f2f2\" style=\"background-color: rgb(51, 51, 51);\">&nbsp;Created with W0RD by Tim Greller&nbsp;</font></div></body>")
+			.replaceFirst("</body>", "<div style=\"position:fixed;bottom:4px;left:50%;text-align:center;transform:translate(-50%,0%);-webkit-transform:translate(-50%,0%);\"><a style=\"text-decoration:none\" href=\"https://github.com/timlg07/W0RD\"><font face=\"Source Code Pro Black\" size=\"2\" color=\"#f2f2f2\" style=\"background-color: rgb(51, 51, 51);\">&nbsp;This file was created with W0RD - a free, fast and simple text editor by Tim Greller&nbsp;</font></a></div></body>")
 		;
 	}
 	
