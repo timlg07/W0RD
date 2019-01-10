@@ -32,10 +32,17 @@ public class Main extends Application {
 	int index = 0; int showIndex;
 	boolean isRunning = false;
 	Label stateOut = new Label("bereit");
-	File currentFile = new File("data\\file"+ index + ".html");
+	File currentFile;
 	
 	@Override
-	public void start(Stage primaryStage) {
+	public void init() {
+		new File("data").mkdir();
+		currentFile = new File("data\\file"+ index + ".html");
+		isRunning = true;
+	}
+	
+	@Override
+	public void start(Stage primaryStage) {		
 		try {			
 			VBox root = new VBox();
 			root.setAlignment(Pos.BASELINE_CENTER );
@@ -268,11 +275,6 @@ public class Main extends Application {
 	public void stop() throws Exception {
 		save(currentFile);
 		isRunning = false;
-	}
-	
-	@Override
-	public void init() throws Exception {
-		isRunning = true;
 	}
 	
 	public static void main(String[] args) {
