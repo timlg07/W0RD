@@ -133,20 +133,13 @@ public class Main extends Application {
 	}
 	
 	public void save(File file) {
-		new Thread( () -> {
-			setStateOut("speichern...");
-			try {
-				Thread.sleep(1_000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			setStateOut((isRunning)? "bereit" : "Fehler");
-		}).start();
+		setStateOut("speichern...");
 		
 		PrintWriter pWriter = null; 
 		try { 
-		    pWriter = new PrintWriter(new BufferedWriter(new FileWriter(file))); 
+		    pWriter = new PrintWriter(file); 
 		    pWriter.println(editor.getHtmlText());
+		    setStateOut("bereit");
 		} catch (IOException ioe) { 
 		    ioe.printStackTrace(); 
 		} finally { 
@@ -158,34 +151,12 @@ public class Main extends Application {
 	}
 	
 	public void saveUnder(Window primaryStage) {
-		new Thread( () -> {
-			setStateOut("speichern...");
-			try {
-				Thread.sleep(1_000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			setStateOut((isRunning)? "bereit" : "Fehler");
-		}).start();
-		
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Wählen Sie Verzeichniss und Name");
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Website","*.html"));
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Quelltext","*.txt"));
 		File file = fc.showSaveDialog(primaryStage);
-		
-		PrintWriter pWriter = null; 
-		try { 
-		    pWriter = new PrintWriter(new BufferedWriter(new FileWriter(file))); 
-		    pWriter.println(editor.getHtmlText());
-		} catch (IOException ioe) { 
-		    ioe.printStackTrace(); 
-		} finally { 
-		    if (pWriter != null){ 
-		    	pWriter.flush(); 
-		        pWriter.close(); 
-		    } 
-		}
+		save(file);
 	}
 	
 	public void export(Window primaryStage) {
