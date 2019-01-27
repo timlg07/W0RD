@@ -118,6 +118,8 @@ public class Main extends Application {
 			root.getChildren().add(tools);
 			
 			Scene scene = new Scene(root,1200,800);
+			primaryStage.setMinHeight(300);
+			primaryStage.setMinWidth (300);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			primaryStage.setTitle("Datei: " + showIndex);
