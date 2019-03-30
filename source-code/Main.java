@@ -95,7 +95,7 @@ public class Main extends Application {
 				}
 			});
 			
-			new Thread(() -> {
+			Thread autosave = new Thread(() -> {
 				while(isRunning){
 					try {
 						Thread.sleep(8_000);
@@ -104,12 +104,10 @@ public class Main extends Application {
 					}
 					save(currentFile);
 				}
-			}).start();
+			});
+			autosave.start();
 			
-			tools.getItems().add(saveButton);
-			tools.getItems().add(saveUnderButton);
-			tools.getItems().add(exportAsHTML);
-			tools.getItems().add(loadFileButton);
+			tools.getItems().addAll(saveButton,saveUnderButton,exportAsHTML,loadFileButton);
 			tools.getItems().add(new Separator());
 			tools.getItems().add(new Label("Datei auswählen: "));
 			tools.getItems().add(select);
