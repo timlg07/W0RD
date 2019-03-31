@@ -18,6 +18,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToolBar;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
@@ -54,7 +56,13 @@ public class Main extends Application {
 			
 			ToolBar tools = new ToolBar();
 			
-			// TODO save with STRG + S 
+			
+			primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, (e)->{
+			      if(e.isControlDown() && e.getCode()==KeyCode.S){
+			    	  save(currentFile);
+			      }
+			});
+			
 			Button saveButton = new Button("Speichern");
 			saveButton.setOnAction(new EventHandler<ActionEvent>(){
 				@Override
@@ -95,7 +103,7 @@ public class Main extends Application {
 				}
 			});
 			
-			Thread autosave = new Thread(() -> {
+			new Thread(() -> {
 				while(isRunning){
 					try {
 						Thread.sleep(8_000);
@@ -104,10 +112,12 @@ public class Main extends Application {
 					}
 					save(currentFile);
 				}
-			});
-			autosave.start();
+			}).start();
 			
-			tools.getItems().addAll(saveButton,saveUnderButton,exportAsHTML,loadFileButton);
+			tools.getItems().add(saveButton);
+			tools.getItems().add(saveUnderButton);
+			tools.getItems().add(exportAsHTML);
+			tools.getItems().add(loadFileButton);
 			tools.getItems().add(new Separator());
 			tools.getItems().add(new Label("Datei auswählen: "));
 			tools.getItems().add(select);
@@ -134,6 +144,7 @@ public class Main extends Application {
 	
 	public void save(File file) {
 		setStateOut("speichern...");
+		System.out.println("s");
 		
 		PrintWriter pWriter = null; 
 		try { 
