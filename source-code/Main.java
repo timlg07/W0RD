@@ -144,7 +144,6 @@ public class Main extends Application {
 	
 	public void save(File file) {
 		setStateOut("speichern...");
-		System.out.println("s");
 		
 		PrintWriter pWriter = null; 
 		try { 
